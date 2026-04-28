@@ -1,9 +1,11 @@
 package guru.springframework.spring7restmvc.services;
 
+import ch.qos.logback.core.util.StringUtil;
 import guru.springframework.spring7restmvc.model.Beer;
 import guru.springframework.spring7restmvc.model.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -58,6 +60,49 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
+    public void updateBeerById(UUID beerId, Beer beer) {
+        Beer existing = beerMap.get(beerId);
+        existing.setBeerName(beer.getBeerName());
+        existing.setBeerStyle(beer.getBeerStyle());
+        existing.setQuantityOnHand(beer.getQuantityOnHand());
+        existing.setPrice(beer.getPrice());
+        existing.setUpc(beer.getUpc());
+        existing.setUpdateDate(LocalDateTime.now());
+
+        beerMap.put(existing.getId(), existing);
+    }
+
+    @Override
+    public void deleteById(UUID beerId) {
+        beerMap.remove(beerId);
+    }
+
+    @Override
+    public void patchBeerById(UUID beerId, Beer beer) {
+        Beer existing = beerMap.get(beerId);
+
+        if (StringUtils.hasText(beer.getBeerName())) {
+            existing.setBeerName(beer.getBeerName());
+        }
+
+        if (beer.getBeerStyle() != null) {
+            existing.setBeerStyle(beer.getBeerStyle());
+        }
+
+        if (beer.getQuantityOnHand() != null) {
+            existing.setQuantityOnHand(beer.getQuantityOnHand());
+        }
+
+        if (beer.getPrice() != null) {
+            existing.setPrice(beer.getPrice());
+        }
+
+        if (StringUtils.hasText(beer.getUpc())) {
+            existing.setUpc(beer.getUpc());
+        }
+    }
+
+    @Override
     public List<Beer> listBeers() {
         return new ArrayList<>(beerMap.values());
     }
@@ -68,10 +113,8 @@ public class BeerServiceImpl implements BeerService {
 
         return beerMap.get(id);
     }
-
     @Override
     public Beer saveNewBeer(Beer beer) {
-
         Beer savedBeer = Beer.builder()
                 .id(UUID.randomUUID())
                 .createdDate(LocalDateTime.now())
