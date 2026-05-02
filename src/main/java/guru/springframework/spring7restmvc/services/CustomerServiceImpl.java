@@ -70,7 +70,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void patchById(UUID customerId, Customer customer) {
+    public void patchCustomerById(UUID customerId, Customer customer) {
         Customer existing = customerMap.get(customerId);
 
         if (customer.getName() != null) {
