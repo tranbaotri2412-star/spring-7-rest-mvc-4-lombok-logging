@@ -68,14 +68,15 @@ class CustomerControllerTest {
         Customer customer = customerServiceImpl.getAllCustomers().get(0);
 
         Map<String, Object> customerMap = new HashMap<>();
-        customerMap.put("name","New Name");
+        customerMap.put("name", "New Name");
 
         mockMvc.perform(patch("/api/v1/customers/" + customer.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(customerMap)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(customerMap)))
                 .andExpect(status().isNoContent());
 
-        verify(customerService).patchCustomerById(uuidArgumentCaptor.capture(), customerArgumentCaptor.capture());
+        verify(customerService).patchCustomerById(uuidArgumentCaptor.capture(),
+                customerArgumentCaptor.capture());
 
         assertThat(uuidArgumentCaptor.getValue()).isEqualTo(customer.getId());
         assertThat(customerArgumentCaptor.getValue().getName())
