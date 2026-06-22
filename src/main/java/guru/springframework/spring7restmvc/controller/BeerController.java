@@ -17,8 +17,8 @@ import java.util.UUID;
  * Created by jt, Spring Framework Guru.
  */
 @Slf4j
-@RestController
 @RequiredArgsConstructor
+@RestController
 public class BeerController {
 
     public static final String BEER_PATH = "/api/v1/beers";
